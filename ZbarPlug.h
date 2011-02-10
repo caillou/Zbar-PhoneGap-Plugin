@@ -13,7 +13,11 @@
 
 @interface ZbarPlug : PhoneGapCommand <ZBarReaderViewDelegate>
 {
+	@private NSString *callback;
 }
+
+@property (nonatomic, retain) NSString *callback;
+
 - (void)showZbar:(NSArray*)arguments withDict:(NSDictionary*)options;
 
 @end

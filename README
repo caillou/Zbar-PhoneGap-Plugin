@@ -1,0 +1,11 @@
+	function onDeviceReady()
+	{
+		document.getElementById('scan')
+			.addEventListener('click', function () {
+				Barcode.read(
+					function (data) {
+						alert('Type:' + data.type + ', Value: ' + data.value);
+					}
+				);
+			});
+	}

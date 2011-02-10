@@ -12,8 +12,19 @@
 
 @implementation ZbarPlug
 
+@synthesize callback;
+
 - (void)showZbar:(NSArray*)arguments withDict:(NSDictionary*)options
 {
+	
+	NSUInteger argc = [arguments count];
+	self.callback = nil;
+	
+	if (argc > 0) {
+		self.callback = [arguments objectAtIndex:0];
+		//[self.callback retain];
+	}
+	
     ZBarReaderViewController *reader = [ZBarReaderViewController new];
     reader.readerDelegate = self;
 	
@@ -39,17 +50,10 @@
         // EXAMPLE: just grab the first barcode
         break;
 	
-	NSString* retStr = [ NSString stringWithFormat:@"window.plugins.ZbarPlug.data = {value:\"%@\", type:\"%@\"};", 
-						symbol.data, symbol.typeName];
-	
-	[ webView stringByEvaluatingJavaScriptFromString:retStr ];	
-	
-    // if you need a javascript callback I would put it here (example)
-    // the callback can use the barcode data that was stored in window.plugins.ZbarPlug.data
-	NSString* callbackStr = [ NSString stringWithFormat:@"window.plugins.ZbarPlug.action()"];
-	
 	// this will execute the your javascript callback
-	[ webView stringByEvaluatingJavaScriptFromString:callbackStr ];
+	[ webView stringByEvaluatingJavaScriptFromString: [NSString stringWithFormat:@"%@({value:\"%@\", type:\"%@\"});", self.callback, symbol.data, symbol.typeName ]];
+	
+	//[self.callback release];
 
 	[info objectForKey: UIImagePickerControllerOriginalImage];
 	
