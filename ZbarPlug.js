@@ -4,7 +4,7 @@ function ZbarPlug() {
 }
 
 ZbarPlug.prototype.action = function () {
-	alert('data ' + this.data);
+	alert('Type:' + this.data.type + ', Value: ' + this.data.value);
 };
 
 ZbarPlug.prototype.getQrCode = function () {

@@ -39,21 +39,26 @@
         // EXAMPLE: just grab the first barcode
         break;
 	
-	NSString* retStr = [ NSString stringWithFormat:@"window.plugins.ZbarPlug.data = \"%@\";", 
-						symbol.data];
+	NSString* retStr = [ NSString stringWithFormat:@"window.plugins.ZbarPlug.data = {value:\"%@\", type:\"%@\"};", 
+						symbol.data, symbol.typeName];
+	
 	[ webView stringByEvaluatingJavaScriptFromString:retStr ];	
 	
-        // if you need a javascript callback I would put it here (example)
-        // the callback can use the barcode data that was stored in window.plugins.ZbarPlug.data
-        // NSString* callbackStr = [ NSString stringWithFormat:@"window.plugins.ZbarPlug.finished_callback()"];
-
-        // this will execute the your javascript callback
-        //[ webView stringByEvaluatingJavaScriptFromString:callbackStr ];
+    // if you need a javascript callback I would put it here (example)
+    // the callback can use the barcode data that was stored in window.plugins.ZbarPlug.data
+	NSString* callbackStr = [ NSString stringWithFormat:@"window.plugins.ZbarPlug.action()"];
+	
+	// this will execute the your javascript callback
+	[ webView stringByEvaluatingJavaScriptFromString:callbackStr ];
 
 	[info objectForKey: UIImagePickerControllerOriginalImage];
 	
     // ADD: dismiss the controller (NB dismiss from the *reader*!)
     [[super appViewController] dismissModalViewControllerAnimated:YES];
+	
+	// reset position
+	// you don't have to do that if you hide the status bar
+	webView.frame = CGRectMake(webView.frame.origin.x, 20, webView.frame.size.width, webView.frame.size.height);
 }
 
 @end
